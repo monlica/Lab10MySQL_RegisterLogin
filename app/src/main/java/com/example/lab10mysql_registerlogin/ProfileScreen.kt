@@ -34,6 +34,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 @Composable
 fun ProfileScreen(navController: NavHostController) {
     lateinit var sharedPreferences: SharedPreferencesManager
@@ -41,11 +42,14 @@ fun ProfileScreen(navController: NavHostController) {
     sharedPreferences = SharedPreferencesManager(contextForToast)
     val userId = sharedPreferences.userId ?: ""
     val createClient = StudentAPI.create()
-    val initialStudent = ProfileClass("","","","")
+    val initialStudent = ProfileClass("", "", "", "")
     var studentItems by remember { mutableStateOf(initialStudent) }
-    // For Alert Dialog: Confirm to Logout
-    var logoutDialog by remember { mutableStateOf(false) }
-    var checkedState by remember { mutableStateOf(false) }
+
+
+     // For Alert Dialog: Confirm to Logout ให้นศ.เพิ่ม
+        var logoutDialog by remember { mutableStateOf(false) }
+        var checkedState by remember { mutableStateOf(false) }
+
     ////// Check Lifecycle State
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
@@ -59,19 +63,28 @@ fun ProfileScreen(navController: NavHostController) {
             Lifecycle.State.RESUMED -> {
                 createClient.searchStudent(userId)
                     .enqueue(object : Callback<ProfileClass> {
-                        override fun onResponse(call: Call<ProfileClass>,
-                                                response: Response<ProfileClass>) {
-                            if(response.isSuccessful){
+                        override fun onResponse(
+                            call: Call<ProfileClass>,
+                            response: Response<ProfileClass>
+                        ) {
+                            if (response.isSuccessful) {
                                 studentItems = ProfileClass(
                                     response.body()!!.std_id, response.body()!!.std_name,
-                                    response.body()!!.std_gender, response.body()!!.role )
-                            }else{
-                                Toast.makeText(contextForToast,"Student ID Not Found",
-                                    Toast.LENGTH_LONG).show()  }
+                                    response.body()!!.std_gender, response.body()!!.role
+                                )
+                            } else {
+                                Toast.makeText(
+                                    contextForToast, "Student ID Not Found",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
+
                         override fun onFailure(call: Call<ProfileClass>, t: Throwable) {
-                            Toast.makeText(contextForToast,"Error onFailure " + t.message,
-                                Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                contextForToast, "Error onFailure " + t.message,
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     })
             } /// End RESUMED
@@ -89,49 +102,47 @@ fun ProfileScreen(navController: NavHostController) {
             text = "Profile",
             fontSize = 25.sp
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             lineHeight = 30.sp,
-            text = "Student ID: $userId\nName: ${studentItems.std_name}\n"
-                    +"Gender: ${studentItems.std_gender}\nRole: ${studentItems.role} ",
-            fontSize = 18.sp,
+            text = "Student ID: $userId\n\nName: ${studentItems.std_name}\n\n"
+                    + "Gender: ${studentItems.std_gender}\n\nRole: ${studentItems.role} ",
+            fontSize = 20.sp,
         )
+
+
         Spacer(modifier = Modifier.height(16.dp))
         val isInvisible = studentItems.role == "admin"
         Box( /// For admin role
             content = {
                 if (isInvisible) {
                     Button(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                             .height(50.dp),
                         onClick = { /* Assignment 10*/
-
-                         //   navController.navigate(Screen.AllStudent.route)
-
-
-                        },
+                               navController.navigate(Screen.AllStudent.route)
+                        }
                     ) {
-                        Text("Show all students") }
+                        Text("Show all students")
+                    }
                 }
-            },
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+            })
+        Spacer(modifier = Modifier.height(20.dp))
         Button(
-            onClick = {
-                /// ให้นศ.เพิ่มคำสั่ง แสดง Dialog
+            onClick = { /// ให้นศ.เพิ่มคำสั่ง แสดง Dialog Labข้อ 2
                 logoutDialog = true
             },
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
                 .height(50.dp),
         ) {
             Text("Logout")
         }
     }
 
-    if (logoutDialog) {
-        /// ให้นศ.สร้าง Dialog ยืนยันการ Logout
+
+/////// ให้นศ.สร้าง Dialog ยืนยันการ Logout
+  if (logoutDialog) {
+
         AlertDialog(
             onDismissRequest = { logoutDialog = false },
             confirmButton = {
@@ -185,5 +196,29 @@ fun ProfileScreen(navController: NavHostController) {
                 }
             }
         )
-    }
+    }/////// จบ Dialog
 }
+
+/// Assigment 10
+/*
+Spacer(modifier = Modifier.height(16.dp))
+val isInvisible = studentItems.role == "admin"
+Box( /// For admin role
+    content = {
+        if (isInvisible) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                onClick = { /* Assignment 10*/
+
+                 //   navController.navigate(Screen.AllStudent.route)
+
+
+                },
+            ) {
+                Text("Show all students") }
+        }
+    },
+)
+*/

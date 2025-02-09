@@ -32,8 +32,7 @@ class MainActivity : ComponentActivity() {
 fun MyScreen() {
     val navController = rememberNavController()
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
     }

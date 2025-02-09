@@ -26,6 +26,11 @@ fun NavGraph(navController: NavHostController) {
         ) {
             ProfileScreen(navController)
         }
-
+        //Assignment 10
+        composable(
+            route = Screen.AllStudent.route
+        ) {
+            AllStudentScreen(navController)
+        }
     }
 }

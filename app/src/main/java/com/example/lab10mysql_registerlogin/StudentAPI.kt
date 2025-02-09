@@ -15,7 +15,6 @@ import retrofit2.http.Path
 * */
 interface StudentAPI {
 
-
     @FormUrlEncoded
     @POST("login")
     fun loginStudent(
@@ -37,6 +36,10 @@ interface StudentAPI {
         @Field("std_gender") std_gender: String,
     ):Call<LoginClass>
 
+    // Assignment 10
+    @GET("allResgiter")
+    fun retrieveStudent(): Call<List<ProfileClass>>
+/////
     companion object {
         fun create(): StudentAPI {
             val stdClient: StudentAPI = Retrofit.Builder()

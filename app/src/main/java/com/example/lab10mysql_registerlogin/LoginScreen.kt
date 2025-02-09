@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,11 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,7 +42,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(navController: NavHostController) {
     var studentID by remember { mutableStateOf("") }
@@ -81,24 +77,21 @@ fun LoginScreen(navController: NavHostController) {
         }
     }
 
-
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Log In",
-            fontSize = 25.sp
+            text = "Log In",fontSize = 25.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = studentID,
             onValueChange = {
                 studentID = it
-                isButtonEnabled = !studentID.isNullOrEmpty()  && !password.isNullOrEmpty()
+                isButtonEnabled = studentID.isNotEmpty() && password.isNotEmpty()
             },
             label = { Text("Student ID") },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -107,15 +100,14 @@ fun LoginScreen(navController: NavHostController) {
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
             },
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = password,
             onValueChange = {
                 password = it
-                isButtonEnabled = !studentID.isNullOrEmpty() && !password.isNullOrEmpty()
+                isButtonEnabled = studentID.isNotEmpty() && password.isNotEmpty()
             },
             label = { Text("Password") },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -126,8 +118,7 @@ fun LoginScreen(navController: NavHostController) {
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = null)
             },
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
@@ -169,8 +160,7 @@ fun LoginScreen(navController: NavHostController) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row(
-            Modifier
-                .fillMaxWidth()
+            Modifier.fillMaxWidth()
                 .padding(5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
@@ -185,7 +175,6 @@ fun LoginScreen(navController: NavHostController) {
                     navController.navigate(Screen.Register.route)
                 },
             ) {
-
                 Text("Register")
             }
         }
